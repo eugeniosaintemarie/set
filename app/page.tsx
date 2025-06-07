@@ -51,7 +51,7 @@ export default function Home() {
         {/* Audio player (hidden) */}
         <AudioPlayer 
           src="https://archive.org/download/set_20250607/set.mp3"
-          autoPlay={true} 
+          autoPlay={false} 
           onControlsReady={setAudioControls}
         />
 
