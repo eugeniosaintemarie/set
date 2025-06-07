@@ -175,4 +175,32 @@ export function AudioPlayer({ src, autoPlay = true, onPlayPauseChange, onControl
       }
     }
   }, [STORAGE_KEY])
+
+  return (
+    <div className="flex items-center gap-2">
+      <audio
+        ref={audioRef}
+        src={src}
+        loop
+        preload="auto"
+        className="hidden"
+        onError={() => {
+          alert("Error al cargar el audio. Puede ser un problema de CORS, red o formato.");
+          console.error('Audio src:', src);
+        }}
+        onPlay={() => {
+          console.log('Audio play triggered', src);
+        }}
+      />
+      <Button onClick={togglePlayPause}>
+        {isPlaying ? "Pause" : "Play"}
+      </Button>
+      <Button onClick={skipForward}>
+        +2:30
+      </Button>
+      <span className="text-xs">
+        {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')} / {Math.floor(duration / 60)}:{String(Math.floor(duration % 60)).padStart(2, '0')}
+      </span>
+    </div>
+  )
 }
