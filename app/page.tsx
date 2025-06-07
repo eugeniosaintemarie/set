@@ -38,7 +38,7 @@ export default function Home() {
         <AudioPlayer src="/set.mp3" autoPlay={true} />
 
         {/* Username in top right */}
-        <div className="absolute top-4 right-4 text-white text-sm md:text-base font-roboto">
+        <div className="absolute top-4 right-4 text-[#1DB954] text-sm md:text-base font-roboto">
           <FontAwesomeIcon icon={faSpotify} className="mr-2" />
           @eugenio<span className="underline">sainte</span>marie
         </div>
@@ -58,7 +58,7 @@ export default function Home() {
                   </defs>
                   <text className="text-lg sm:text-xl md:text-2xl font-bold fill-gray-700 tracking-widest">
                     <textPath href="#circle-path" startOffset="0%">
-                      CACHENGUE
+                      SET
                     </textPath>
                   </text>
                 </svg>

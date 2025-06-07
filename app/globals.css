@@ -12,7 +12,7 @@ body {
   }
 
   .animate-spin-slow {
-    animation: spin 4s linear infinite;
+    animation: spin 10s linear infinite;
   }
 
   .bg-gradient-conic {

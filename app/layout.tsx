@@ -13,7 +13,7 @@ const roboto = Roboto({
 })
 
 export const metadata: Metadata = {
-  title: "cachengue @eugeniosaintemarie",
+  title: "set @eugeniosaintemarie",
 }
 
 export default function RootLayout({
