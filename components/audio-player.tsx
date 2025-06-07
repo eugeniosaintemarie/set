@@ -27,21 +27,19 @@ export function AudioPlayer({ src, autoPlay = true, onPlayPauseChange, onControl
 
   // Función para pausar/reproducir el audio
   const togglePlayPause = () => {
-    const audioElement = audioRef.current
-    if (!audioElement) return
-
-    if (audioElement.paused) {
-      audioElement.play().catch(error => {
-        console.error("Play failed:", error)
-        // The 'play' event listener will handle setIsPlaying(true) and onPlayPauseChange
-      })
-    } else {
-      audioElement.pause()
-      // The 'pause' event listener will handle setIsPlaying(false) and onPlayPauseChange
+    try {
+      if (audioRef.current) {
+        if (isPlaying) {
+          audioRef.current.pause();
+        } else {
+          audioRef.current.play();
+        }
+      }
+    } catch (error) {
+      console.error('Error en reproducción:', error);
+      alert('Por favor haz click primero en el botón de play para iniciar');
     }
-    // No need to call setIsPlaying or onPlayPauseChange here,
-    // as the event listeners will take care of it.
-  }
+  };
 
   // Función para adelantar 2.5 minutos
   const skipForward = () => {
