@@ -13,11 +13,16 @@ export type AudioControls = {
   togglePlayPause: () => void;
   skipForward: () => void;
   isPlaying: boolean;
+  currentTime: number;
+  duration: number;
+  seek: (time: number) => void;
 }
 
 export function AudioPlayer({ src, autoPlay = true, onPlayPauseChange, onControlsReady }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null)
   const [isPlaying, setIsPlaying] = useState(autoPlay)
+  const [currentTime, setCurrentTime] = useState(0)
+  const [duration, setDuration] = useState(0)
   const STORAGE_KEY = `audio-position-${src}`
 
   // Función para pausar/reproducir el audio
@@ -44,10 +49,19 @@ export function AudioPlayer({ src, autoPlay = true, onPlayPauseChange, onControl
     if (!audioElement) return
     
     // Adelantar 2.5 minutos (150 segundos)
-    audioElement.currentTime = Math.min(audioElement.currentTime + 150, audioElement.duration)
-    
+    const newTime = Math.min(audioElement.currentTime + 150, audioElement.duration)
+    audioElement.currentTime = newTime
+    setCurrentTime(newTime)
     // Guardar la nueva posición
-    localStorage.setItem(STORAGE_KEY, audioElement.currentTime.toString())
+    localStorage.setItem(STORAGE_KEY, newTime.toString())
+  }
+
+  const seek = (time: number) => {
+    const audioElement = audioRef.current
+    if (!audioElement) return
+    audioElement.currentTime = time
+    setCurrentTime(time)
+    localStorage.setItem(STORAGE_KEY, time.toString())
   }
 
   useEffect(() => {
@@ -56,10 +70,13 @@ export function AudioPlayer({ src, autoPlay = true, onPlayPauseChange, onControl
       onControlsReady({
         togglePlayPause,
         skipForward,
-        isPlaying
+        isPlaying,
+        currentTime,
+        duration,
+        seek
       });
     }
-  }, [isPlaying, onControlsReady, togglePlayPause, skipForward]); // Added togglePlayPause and skipForward for completeness if controls are recreated
+  }, [isPlaying, onControlsReady, togglePlayPause, skipForward, currentTime, duration, seek]); // Added togglePlayPause and skipForward for completeness if controls are recreated
 
   useEffect(() => {
     const audioElement = audioRef.current
@@ -79,9 +96,19 @@ export function AudioPlayer({ src, autoPlay = true, onPlayPauseChange, onControl
       }
     }
 
+    const handleTimeUpdate = () => {
+      setCurrentTime(audioElement.currentTime)
+    }
+
+    const handleLoadedMetadata = () => {
+      setDuration(audioElement.duration)
+    }
+
     // Agregar event listeners para mantener el estado sincronizado
     audioElement.addEventListener('play', handlePlay)
     audioElement.addEventListener('pause', handlePause)
+    audioElement.addEventListener('timeupdate', handleTimeUpdate)
+    audioElement.addEventListener('loadedmetadata', handleLoadedMetadata)
 
     // Sincronizar el estado inicial en caso de que autoPlay sea falso o falle silenciosamente
     if (audioElement.paused) {
@@ -103,6 +130,8 @@ export function AudioPlayer({ src, autoPlay = true, onPlayPauseChange, onControl
     return () => {
       audioElement.removeEventListener('play', handlePlay)
       audioElement.removeEventListener('pause', handlePause)
+      audioElement.removeEventListener('timeupdate', handleTimeUpdate)
+      audioElement.removeEventListener('loadedmetadata', handleLoadedMetadata)
     }
   }, [onPlayPauseChange])
 
@@ -113,7 +142,13 @@ export function AudioPlayer({ src, autoPlay = true, onPlayPauseChange, onControl
     // Recuperar la posición guardada
     const savedPosition = localStorage.getItem(STORAGE_KEY)
     if (savedPosition) {
-      audioElement.currentTime = parseFloat(savedPosition)
+      const savedTime = parseFloat(savedPosition)
+      audioElement.currentTime = savedTime
+      setCurrentTime(savedTime)
+    }
+    // Ensure duration is set if metadata is already loaded
+    if (audioElement.readyState >= 1) { // HAVE_METADATA
+      setDuration(audioElement.duration);
     }
 
     const playAudio = async () => {
@@ -176,7 +211,7 @@ export function AudioPlayer({ src, autoPlay = true, onPlayPauseChange, onControl
 
   return (
     <>
-      <audio ref={audioRef} src={src} loop preload="auto" className="hidden" />
+      <audio ref={audioRef} src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}${src}`} loop preload="auto" className="hidden" />
     </>
   )
 }

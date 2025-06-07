@@ -6,6 +6,19 @@ import { useEffect, useState } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpotify } from '@fortawesome/free-brands-svg-icons'
 
+// Función para formatear el tiempo en HH:MM:SS
+const formatTime = (timeInSeconds: number) => {
+  if (isNaN(timeInSeconds) || timeInSeconds < 0) return "00:00:00";
+  
+  const hours = Math.floor(timeInSeconds / 3600);
+  const minutes = Math.floor((timeInSeconds % 3600) / 60);
+  const seconds = Math.floor(timeInSeconds % 60);
+  
+  return hours > 0 
+    ? `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+    : `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+};
+
 export default function Home() {
   const { isSupported, isActive } = useWakeLock()
   const [audioControls, setAudioControls] = useState<AudioControls | null>(null)
@@ -74,7 +87,7 @@ export default function Home() {
           {/* Reflejo del CD */}
           <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-64 h-8 sm:w-80 sm:h-10 md:w-96 md:h-12 bg-gradient-to-b from-gray-800 to-transparent rounded-full opacity-30 blur-sm"></div>
           
-          {/* Controles de audio */}
+          {/* Controles de audio y barra de progreso */}
           <div className="mt-8 flex space-x-6 items-center">
             <button 
               onClick={() => audioControls?.togglePlayPause()}
@@ -94,6 +107,24 @@ export default function Home() {
               <span className="text-xl font-bold">⏭ </span>
             </button>
           </div>
+
+          {/* Barra de progreso y tiempo */}
+          {audioControls && audioControls.duration > 0 && (
+            <div className="mt-6 w-64 sm:w-80 md:w-96">
+              <input 
+                type="range"
+                min="0"
+                max={audioControls.duration}
+                value={audioControls.currentTime}
+                onChange={(e) => audioControls.seek(parseFloat(e.target.value))}
+                className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 [&::-webkit-slider-thumb]:bg-[#1DB954] [&::-moz-range-thumb]:bg-[#1DB954]" style={{accentColor: '#1DB954'}}
+              />
+              <div className="flex justify-between text-xs text-white mt-1 font-roboto">
+                <span>{formatTime(audioControls.currentTime)}</span>
+                <span>{formatTime(audioControls.duration)}</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
