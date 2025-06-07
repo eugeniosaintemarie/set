@@ -175,20 +175,4 @@ export function AudioPlayer({ src, autoPlay = true, onPlayPauseChange, onControl
       }
     }
   }, [STORAGE_KEY])
-
-  // Mostrar botón de Play/Pause
-  return (
-    <div className="flex items-center gap-2">
-      <audio ref={audioRef} src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}${src}`} loop preload="auto" className="hidden" />
-      <Button onClick={togglePlayPause}>
-        {isPlaying ? "Pause" : "Play"}
-      </Button>
-      <Button onClick={skipForward}>
-        +2:30
-      </Button>
-      <span className="text-xs">
-        {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')} / {Math.floor(duration / 60)}:{String(Math.floor(duration % 60)).padStart(2, '0')}
-      </span>
-    </div>
-  )
 }

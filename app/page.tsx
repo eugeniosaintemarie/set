@@ -50,7 +50,7 @@ export default function Home() {
       <div className="relative min-h-screen flex items-center justify-center p-4">
         {/* Audio player (hidden) */}
         <AudioPlayer 
-          src="/set.mp3" 
+          src="https://media.githubusercontent.com/media/eugeniosaintemarie/set/refs/heads/main/public/set.mp3" 
           autoPlay={true} 
           onControlsReady={setAudioControls}
         />
