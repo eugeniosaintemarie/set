@@ -16,7 +16,15 @@ body {
   }
 
   .bg-gradient-conic {
-    background: conic-gradient(from 0deg, #a855f7, #3b82f6, #10b981, #f59e0b, #ef4444, #a855f7);
+    background: conic-gradient(
+      from 0deg,
+      #a855f7,
+      #3b82f6,
+      #10b981,
+      #f59e0b,
+      #ef4444,
+      #a855f7
+    );
   }
 }
 

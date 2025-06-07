@@ -9,12 +9,12 @@ import { faSpotify } from '@fortawesome/free-brands-svg-icons'
 // Función para formatear el tiempo en HH:MM:SS
 const formatTime = (timeInSeconds: number) => {
   if (isNaN(timeInSeconds) || timeInSeconds < 0) return "00:00:00";
-  
+
   const hours = Math.floor(timeInSeconds / 3600);
   const minutes = Math.floor((timeInSeconds % 3600) / 60);
   const seconds = Math.floor(timeInSeconds % 60);
-  
-  return hours > 0 
+
+  return hours > 0
     ? `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
     : `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 };
@@ -49,9 +49,9 @@ export default function Home() {
       {/* Contenido principal */}
       <div className="relative min-h-screen flex items-center justify-center p-4">
         {/* Audio player (hidden) */}
-        <AudioPlayer 
+        <AudioPlayer
           src="https://ia800704.us.archive.org/14/items/set_20250607/set.mp3"
-          autoPlay={false} 
+          autoPlay={false}
           onControlsReady={setAudioControls}
         />
 
@@ -86,10 +86,10 @@ export default function Home() {
 
           {/* Reflejo del CD */}
           <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-64 h-8 sm:w-80 sm:h-10 md:w-96 md:h-12 bg-gradient-to-b from-gray-800 to-transparent rounded-full opacity-30 blur-sm"></div>
-          
+
           {/* Controles de audio y barra de progreso */}
           <div className="mt-8 flex space-x-6 items-center">
-            <button 
+            <button
               onClick={() => audioControls?.togglePlayPause()}
               className="bg-white bg-opacity-80 hover:bg-opacity-100 text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 transform hover:scale-105"
               aria-label={audioControls?.isPlaying ? "Pausar" : "Reproducir"}
@@ -98,8 +98,8 @@ export default function Home() {
                 {audioControls?.isPlaying ? "⏸" : "▶"}
               </span>
             </button>
-            
-            <button 
+
+            <button
               onClick={() => audioControls?.skipForward()}
               className="bg-white bg-opacity-80 hover:bg-opacity-100 text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 transform hover:scale-105"
               aria-label="Adelantar 2:30 minutos"
@@ -111,13 +111,13 @@ export default function Home() {
           {/* Barra de progreso y tiempo */}
           {audioControls && audioControls.duration > 0 && (
             <div className="mt-6 w-64 sm:w-80 md:w-96">
-              <input 
+              <input
                 type="range"
                 min="0"
                 max={audioControls.duration}
                 value={audioControls.currentTime}
                 onChange={(e) => audioControls.seek(parseFloat(e.target.value))}
-                className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 [&::-webkit-slider-thumb]:bg-[#1DB954] [&::-moz-range-thumb]:bg-[#1DB954]" style={{accentColor: '#1DB954'}}
+                className="w-full h-2 bg-gray-300 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 [&::-webkit-slider-thumb]:bg-[#1DB954] [&::-moz-range-thumb]:bg-[#1DB954]" style={{ accentColor: '#1DB954' }}
               />
               <div className="flex justify-between text-xs text-white mt-1 font-roboto">
                 <span>{formatTime(audioControls.currentTime)}</span>

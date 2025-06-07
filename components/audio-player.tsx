@@ -46,7 +46,7 @@ export function AudioPlayer({ src, autoPlay = true, onPlayPauseChange, onControl
   const skipForward = () => {
     const audioElement = audioRef.current
     if (!audioElement) return
-    
+
     // Adelantar 2.5 minutos (150 segundos)
     const newTime = Math.min(audioElement.currentTime + 150, audioElement.duration)
     audioElement.currentTime = newTime
@@ -183,6 +183,7 @@ export function AudioPlayer({ src, autoPlay = true, onPlayPauseChange, onControl
         src={src}
         loop
         preload="auto"
+        className="sr-only-audio"
         onError={() => {
           alert("Error al cargar el audio. Puede ser un problema de CORS, red o formato.");
           console.error('Audio src:', src);
