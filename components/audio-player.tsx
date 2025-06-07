@@ -183,7 +183,6 @@ export function AudioPlayer({ src, autoPlay = true, onPlayPauseChange, onControl
         src={src}
         loop
         preload="auto"
-        className="hidden"
         onError={() => {
           alert("Error al cargar el audio. Puede ser un problema de CORS, red o formato.");
           console.error('Audio src:', src);
@@ -191,8 +190,12 @@ export function AudioPlayer({ src, autoPlay = true, onPlayPauseChange, onControl
         onPlay={() => {
           console.log('Audio play triggered', src);
         }}
+        controls // Mostramos los controles nativos
       />
-      <Button onClick={togglePlayPause}>
+      <Button onClick={() => {
+        console.log('audioRef.current:', audioRef.current);
+        togglePlayPause();
+      }}>
         {isPlaying ? "Pause" : "Play"}
       </Button>
       <Button onClick={skipForward}>
