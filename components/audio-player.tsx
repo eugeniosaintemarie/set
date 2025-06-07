@@ -191,7 +191,7 @@ export function AudioPlayer({ src, autoPlay = true, onPlayPauseChange, onControl
         onPlay={() => {
           console.log('Audio play triggered', src);
         }}
-        controls // Mostramos los controles nativos
+      // controls // Quitamos los controles nativos
       />
       <Button onClick={() => {
         console.log('audioRef.current:', audioRef.current);
