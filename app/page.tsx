@@ -50,7 +50,7 @@ export default function Home() {
       <div className="relative min-h-screen flex items-center justify-center p-4">
         {/* Audio player (hidden) */}
         <AudioPlayer 
-          src="https://drive.google.com/uc?export=download&id=1JSn1zyj-BVjxK2ThdbZBDSH2BZ6rWtDV" 
+          src="https://eugenioset.vercel.app/set.mp3"
           autoPlay={true} 
           onControlsReady={setAudioControls}
         />
