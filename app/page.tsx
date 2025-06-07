@@ -58,7 +58,7 @@ export default function Home() {
                   </defs>
                   <text className="text-lg sm:text-xl md:text-2xl font-bold fill-gray-700 tracking-widest">
                     <textPath href="#circle-path" startOffset="0%">
-                      SET
+                      musica_ares_16
                     </textPath>
                   </text>
                 </svg>
