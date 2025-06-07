@@ -1,13 +1,14 @@
 "use client"
 
 import { useWakeLock } from "@/hooks/use-wake-lock"
-import { AudioPlayer } from "@/components/audio-player"
-import { useEffect } from "react"
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSpotify } from '@fortawesome/free-brands-svg-icons'; // Added a comment to force re-compilation
+import { AudioPlayer, AudioControls } from "@/components/audio-player"
+import { useEffect, useState } from "react"
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faSpotify } from '@fortawesome/free-brands-svg-icons'
 
 export default function Home() {
   const { isSupported, isActive } = useWakeLock()
+  const [audioControls, setAudioControls] = useState<AudioControls | null>(null)
 
   useEffect(() => {
     // Log wake lock status
@@ -35,7 +36,11 @@ export default function Home() {
       {/* Contenido principal */}
       <div className="relative min-h-screen flex items-center justify-center p-4">
         {/* Audio player (hidden) */}
-        <AudioPlayer src="/set.mp3" autoPlay={true} />
+        <AudioPlayer 
+          src="/set.mp3" 
+          autoPlay={true} 
+          onControlsReady={setAudioControls}
+        />
 
         {/* Username in top right */}
         <div className="absolute top-4 right-4 text-[#1DB954] text-sm md:text-base font-roboto">
@@ -43,7 +48,7 @@ export default function Home() {
           @eugenio<span className="underline">sainte</span>marie
         </div>
 
-        <div className="relative">
+        <div className="relative flex flex-col items-center">
           {/* CD exterior */}
           <div className="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full bg-white border-4 border-gray-300 shadow-2xl animate-spin-slow relative overflow-hidden opacity-90">
             {/* Círculo interior del CD */}
@@ -68,6 +73,27 @@ export default function Home() {
 
           {/* Reflejo del CD */}
           <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-64 h-8 sm:w-80 sm:h-10 md:w-96 md:h-12 bg-gradient-to-b from-gray-800 to-transparent rounded-full opacity-30 blur-sm"></div>
+          
+          {/* Controles de audio */}
+          <div className="mt-8 flex space-x-6 items-center">
+            <button 
+              onClick={() => audioControls?.togglePlayPause()}
+              className="bg-white bg-opacity-80 hover:bg-opacity-100 text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 transform hover:scale-105"
+              aria-label={audioControls?.isPlaying ? "Pausar" : "Reproducir"}
+            >
+              <span className="text-xl font-bold">
+                {audioControls?.isPlaying ? "⏸" : "▶"}
+              </span>
+            </button>
+            
+            <button 
+              onClick={() => audioControls?.skipForward()}
+              className="bg-white bg-opacity-80 hover:bg-opacity-100 text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 transform hover:scale-105"
+              aria-label="Adelantar 2:30 minutos"
+            >
+              <span className="text-xl font-bold">⏭ </span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
