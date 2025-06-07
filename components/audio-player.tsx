@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { Button } from "./ui/button"
 
 interface AudioPlayerProps {
   src: string
@@ -20,7 +21,7 @@ export type AudioControls = {
 
 export function AudioPlayer({ src, autoPlay = true, onPlayPauseChange, onControlsReady }: AudioPlayerProps) {
   const audioRef = useRef<HTMLAudioElement>(null)
-  const [isPlaying, setIsPlaying] = useState(autoPlay)
+  const [isPlaying, setIsPlaying] = useState(false) // Cambiar autoPlay a false por defecto
   const [currentTime, setCurrentTime] = useState(0)
   const [duration, setDuration] = useState(0)
   const STORAGE_KEY = `audio-position-${src}`
@@ -149,33 +150,6 @@ export function AudioPlayer({ src, autoPlay = true, onPlayPauseChange, onControl
       setDuration(audioElement.duration);
     }
 
-    const playAudio = async () => {
-      try {
-        if (autoPlay) {
-          // Try to play audio automatically
-          await audioElement.play()
-          // setIsPlaying and onPlayPauseChange will be handled by the 'play' event listener
-        }
-      } catch (error) {
-        console.error("Auto-play failed:", error)
-        // setIsPlaying and onPlayPauseChange will be handled by the 'pause' event listener or initial state check
-      }
-    }
-
-    playAudio()
-
-    // Handle iOS/Safari restrictions by adding user interaction listener
-    const handleUserInteraction = async () => {
-      try {
-        if (audioElement.paused) { // Check audioElement.paused directly
-          await audioElement.play()
-          // setIsPlaying and onPlayPauseChange will be handled by the 'play' event listener
-        }
-      } catch (error) {
-        console.error("Play failed after user interaction:", error)
-      }
-    }
-
     // Guardar la posición actual cada 5 segundos
     const savePositionInterval = setInterval(() => {
       if (audioElement && !audioElement.paused) {
@@ -190,26 +164,31 @@ export function AudioPlayer({ src, autoPlay = true, onPlayPauseChange, onControl
       }
     }
 
-    document.addEventListener("click", handleUserInteraction, { once: true })
-    document.addEventListener("touchstart", handleUserInteraction, { once: true })
     window.addEventListener("beforeunload", handleBeforeUnload)
 
     return () => {
-      document.removeEventListener("click", handleUserInteraction)
-      document.removeEventListener("touchstart", handleUserInteraction)
       window.removeEventListener("beforeunload", handleBeforeUnload)
       clearInterval(savePositionInterval)
-      
       // Guardar la posición al desmontar el componente
       if (audioElement && !audioElement.paused) {
         localStorage.setItem(STORAGE_KEY, audioElement.currentTime.toString())
       }
     }
-  }, [autoPlay, STORAGE_KEY, onPlayPauseChange]) // Removed isPlaying as it's managed by its own effect
+  }, [STORAGE_KEY])
 
+  // Mostrar botón de Play/Pause
   return (
-    <>
+    <div className="flex items-center gap-2">
       <audio ref={audioRef} src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}${src}`} loop preload="auto" className="hidden" />
-    </>
+      <Button onClick={togglePlayPause}>
+        {isPlaying ? "Pause" : "Play"}
+      </Button>
+      <Button onClick={skipForward}>
+        +2:30
+      </Button>
+      <span className="text-xs">
+        {Math.floor(currentTime / 60)}:{String(Math.floor(currentTime % 60)).padStart(2, '0')} / {Math.floor(duration / 60)}:{String(Math.floor(duration % 60)).padStart(2, '0')}
+      </span>
+    </div>
   )
 }
