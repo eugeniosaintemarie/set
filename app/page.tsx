@@ -59,11 +59,20 @@ export default function Home() {
         />
 
         <div className="absolute top-4 left-1/2 -translate-x-1/2 text-[#1DB954] text-sm md:text-base font-roboto flex items-center justify-center">
-          {showSpotify ? (
-            <FontAwesomeIcon icon={faSpotify} className="mr-2 transition-opacity duration-500" />
-          ) : (
-            <span className="mr-2 transition-opacity duration-500">@</span>
-          )}
+          <span className="relative w-5 h-5 flex items-center justify-center">
+            <span
+              className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${showSpotify ? 'opacity-100' : 'opacity-0'}`}
+              style={{ pointerEvents: showSpotify ? 'auto' : 'none' }}
+            >
+              <FontAwesomeIcon icon={faSpotify} />
+            </span>
+            <span
+              className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${!showSpotify ? 'opacity-100' : 'opacity-0'}`}
+              style={{ pointerEvents: !showSpotify ? 'auto' : 'none' }}
+            >
+              @
+            </span>
+          </span>
           eugenio<span className="underline">sainte</span>marie
         </div>
 
