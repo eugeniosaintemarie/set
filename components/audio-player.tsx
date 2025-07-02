@@ -12,6 +12,7 @@ interface AudioPlayerProps {
 export type AudioControls = {
   togglePlayPause: () => void;
   skipForward: () => void;
+  skipBackward?: () => void;
   isPlaying: boolean;
   currentTime: number;
   duration: number;
@@ -49,6 +50,15 @@ export function AudioPlayer({ src, autoPlay = true, onPlayPauseChange, onControl
     localStorage.setItem(STORAGE_KEY, newTime.toString())
   }
 
+  const skipBackward = () => {
+    const audioElement = audioRef.current
+    if (!audioElement) return
+    const newTime = Math.max(audioElement.currentTime - 150, 0)
+    audioElement.currentTime = newTime
+    setCurrentTime(newTime)
+    localStorage.setItem(STORAGE_KEY, newTime.toString())
+  }
+
   const seek = (time: number) => {
     const audioElement = audioRef.current
     if (!audioElement) return
@@ -62,13 +72,14 @@ export function AudioPlayer({ src, autoPlay = true, onPlayPauseChange, onControl
       onControlsReady({
         togglePlayPause,
         skipForward,
+        skipBackward,
         isPlaying,
         currentTime,
         duration,
         seek
       });
     }
-  }, [isPlaying, onControlsReady, togglePlayPause, skipForward, currentTime, duration, seek]);
+  }, [isPlaying, onControlsReady, togglePlayPause, skipForward, skipBackward, currentTime, duration, seek]);
 
   useEffect(() => {
     const audioElement = audioRef.current

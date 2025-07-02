@@ -80,19 +80,22 @@ export default function Home() {
             <button
               onClick={() => audioControls?.togglePlayPause()}
               className="bg-white bg-opacity-80 hover:bg-opacity-100 text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 transform hover:scale-105"
-              aria-label={audioControls?.isPlaying ? "Pausar" : "Reproducir"}
-            >
+              aria-label={audioControls?.isPlaying ? "Pausar" : "Reproducir"}>
               <span className="text-xl font-bold">
                 {audioControls?.isPlaying ? "||" : "▶"}
               </span>
             </button>
-
             <button
               onClick={() => audioControls?.skipForward()}
               className="bg-white bg-opacity-80 hover:bg-opacity-100 text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 transform hover:scale-105"
-              aria-label="Adelantar 2:30 minutos"
-            >
+              aria-label="Adelantar 2:30 minutos">
               <span className="text-xl font-bold">⏭ </span>
+            </button>
+            <button
+              onClick={() => audioControls?.skipBackward && audioControls.skipBackward()}
+              className="bg-white bg-opacity-80 hover:bg-opacity-100 text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 transform hover:scale-105"
+              aria-label="Retroceder 2:30 minutos">
+              <span className="text-xl font-bold">⏮</span>
             </button>
           </div>
 
