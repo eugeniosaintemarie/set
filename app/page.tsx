@@ -49,7 +49,7 @@ export default function Home() {
           onControlsReady={setAudioControls}
         />
 
-        <div className="absolute top-4 right-4 text-[#1DB954] text-sm md:text-base font-roboto">
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 text-[#1DB954] text-sm md:text-base font-roboto flex items-center justify-center">
           <FontAwesomeIcon icon={faSpotify} className="mr-2" />
           @eugenio<span className="underline">sainte</span>marie
         </div>
