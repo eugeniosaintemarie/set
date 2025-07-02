@@ -21,7 +21,6 @@ const formatTime = (timeInSeconds: number) => {
 export default function Home() {
   const { isSupported, isActive } = useWakeLock()
   const [audioControls, setAudioControls] = useState<AudioControls | null>(null)
-  // Estado para alternar entre el icono y el @
   const [showSpotify, setShowSpotify] = useState(true)
 
   useEffect(() => {
@@ -34,8 +33,8 @@ export default function Home() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setShowSpotify((prev) => !prev)
-    }, 3000)
+      setShowSpotify((prev: boolean) => !prev)
+    }, 1000)
     return () => clearInterval(interval)
   }, [])
 
