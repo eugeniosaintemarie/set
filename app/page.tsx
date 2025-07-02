@@ -34,7 +34,7 @@ export default function Home() {
   useEffect(() => {
     const interval = setInterval(() => {
       setShowSpotify((prev: boolean) => !prev)
-    }, 1000)
+    }, 1500)
     return () => clearInterval(interval)
   }, [])
 
