@@ -21,6 +21,8 @@ const formatTime = (timeInSeconds: number) => {
 export default function Home() {
   const { isSupported, isActive } = useWakeLock()
   const [audioControls, setAudioControls] = useState<AudioControls | null>(null)
+  // Estado para alternar entre el icono y el @
+  const [showSpotify, setShowSpotify] = useState(true)
 
   useEffect(() => {
     if (isSupported) {
@@ -29,6 +31,13 @@ export default function Home() {
       console.log("Wake lock is not supported on this device")
     }
   }, [isSupported, isActive])
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setShowSpotify((prev) => !prev)
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <div className="min-h-screen relative overflow-hidden">
@@ -50,8 +59,12 @@ export default function Home() {
         />
 
         <div className="absolute top-4 left-1/2 -translate-x-1/2 text-[#1DB954] text-sm md:text-base font-roboto flex items-center justify-center">
-          <FontAwesomeIcon icon={faSpotify} className="mr-2" />
-          @eugenio<span className="underline">sainte</span>marie
+          {showSpotify ? (
+            <FontAwesomeIcon icon={faSpotify} className="mr-2 transition-opacity duration-500" />
+          ) : (
+            <span className="mr-2 transition-opacity duration-500">@</span>
+          )}
+          eugenio<span className="underline">sainte</span>marie
         </div>
 
         <div className="relative flex flex-col items-center">
