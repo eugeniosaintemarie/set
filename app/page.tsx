@@ -2,7 +2,7 @@
 
 import { useWakeLock } from "@/hooks/use-wake-lock"
 import { AudioPlayer, AudioControls } from "@/components/audio-player"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpotify } from '@fortawesome/free-brands-svg-icons'
 
@@ -22,6 +22,9 @@ export default function Home() {
   const { isSupported, isActive } = useWakeLock()
   const [audioControls, setAudioControls] = useState<AudioControls | null>(null)
   const [showSpotify, setShowSpotify] = useState(true)
+  const [rotation, setRotation] = useState(0)
+  const rotationRef = useRef<number>(0)
+  const animationRef = useRef<number | null>(null)
 
   useEffect(() => {
     if (isSupported) {
@@ -37,6 +40,32 @@ export default function Home() {
     }, 3000)
     return () => clearInterval(interval)
   }, [])
+
+  // Efecto para manejar la rotación del CD
+  useEffect(() => {
+    const animate = () => {
+      if (audioControls?.isPlaying) {
+        rotationRef.current += 0.09 // Velocidad de rotación (ajustable)
+        setRotation(rotationRef.current)
+        animationRef.current = requestAnimationFrame(animate)
+      }
+    }
+
+    if (audioControls?.isPlaying) {
+      animationRef.current = requestAnimationFrame(animate)
+    } else {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+        animationRef.current = null
+      }
+    }
+
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current)
+      }
+    }
+  }, [audioControls?.isPlaying])
 
   return (
     <div className="min-h-screen relative overflow-hidden">
@@ -79,8 +108,7 @@ export default function Home() {
           <div 
             className="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full bg-white border-4 border-gray-300 shadow-2xl relative overflow-hidden opacity-90 transition-all duration-300"
             style={{
-              animation: audioControls?.isPlaying ? 'spin 4s linear infinite' : 'none',
-              animationPlayState: audioControls?.isPlaying ? 'running' : 'paused'
+              transform: `rotate(${rotation}deg)`
             }}
           >
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full bg-gray-800 shadow-inner border-2 border-gray-600"></div>
