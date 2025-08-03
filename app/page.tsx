@@ -41,11 +41,10 @@ export default function Home() {
     return () => clearInterval(interval)
   }, [])
 
-  // Efecto para manejar la rotación del CD
   useEffect(() => {
     const animate = () => {
       if (audioControls?.isPlaying) {
-        rotationRef.current += 0.09 // Velocidad de rotación (ajustable)
+        rotationRef.current += 0.25
         setRotation(rotationRef.current)
         animationRef.current = requestAnimationFrame(animate)
       }
