@@ -76,7 +76,7 @@ export default function Home() {
         </div>
 
         <div className="relative flex flex-col items-center">
-          <div className="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full bg-white border-4 border-gray-300 shadow-2xl animate-spin-slow relative overflow-hidden opacity-90">
+          <div className={`w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full bg-white border-4 border-gray-300 shadow-2xl relative overflow-hidden opacity-90 transition-all duration-300 ${audioControls?.isPlaying ? 'animate-spin-slow' : ''}`}>
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full bg-gray-800 shadow-inner border-2 border-gray-600"></div>
 
             <div className="absolute inset-0 flex items-center justify-center">
