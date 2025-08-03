@@ -44,7 +44,7 @@ export default function Home() {
   useEffect(() => {
     const animate = () => {
       if (audioControls?.isPlaying) {
-        rotationRef.current += 0.25
+        rotationRef.current += 1
         setRotation(rotationRef.current)
         animationRef.current = requestAnimationFrame(animate)
       }
