@@ -183,7 +183,7 @@ export default function Home() {
           href="https://eugeniosaintemarie.github.io"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-gray-400 hover:text-[#1DB954] transition-colors duration-200 font-mono text-sm select-none"
+          className="text-gray-400 hover:text-violet-500 transition-colors duration-200 font-mono text-sm select-none"
         >
           {"∃ugenio © "}{new Date().getFullYear()}
         </a>
