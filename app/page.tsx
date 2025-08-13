@@ -19,12 +19,12 @@ const formatTime = (timeInSeconds: number) => {
 };
 
 export default function Home() {
-  const { isSupported, isActive } = useWakeLock()
-  const [audioControls, setAudioControls] = useState<AudioControls | null>(null)
-  const [showSpotify, setShowSpotify] = useState(true)
-  const [rotation, setRotation] = useState(0)
-  const rotationRef = useRef<number>(0)
-  const animationRef = useRef<number | null>(null)
+  const { isSupported, isActive } = useWakeLock();
+  const [audioControls, setAudioControls] = useState<AudioControls | null>(null);
+  const [showSpotify, setShowSpotify] = useState(true);
+  const [rotation, setRotation] = useState(0);
+  const rotationRef = useRef<number>(0);
+  const animationRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (isSupported) {
@@ -69,54 +69,18 @@ export default function Home() {
   return (
     <>
       <div className="min-h-screen relative overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-          style={{
-            backgroundImage: "url(/butterfly-bg.jpg)",
-            filter: "blur(2.5px)"
-          }}
-        ></div>
-        <div className="absolute inset-0 bg-black bg-opacity-20"></div>
-        <div className="relative min-h-screen flex items-center justify-center p-4">
-          <AudioPlayer
-            src="https://ia800704.us.archive.org/14/items/set_20250607/set.mp3"
-            autoPlay={false}
-            onControlsReady={setAudioControls}
-          />
-          <a
-            href="https://open.spotify.com/user/eugeniosaintemarie/playlists"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="absolute top-4 left-1/2 -translate-x-1/2 text-[#1DB954] text-sm md:text-base font-roboto flex items-center justify-center hover:underline focus:underline"
-          >
-            <span className="relative w-5 h-5 flex items-center justify-center">
-              <span
-                className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${showSpotify ? 'opacity-100' : 'opacity-0'}`}
-                style={{ pointerEvents: showSpotify ? 'auto' : 'none' }}
-              >
-                <FontAwesomeIcon icon={faSpotify} />
-              </span>
-              <span
-                className={`absolute inset-0 flex items-center justify-center transition-opacity duration-500 ${!showSpotify ? 'opacity-100' : 'opacity-0'}`}
-                style={{ pointerEvents: !showSpotify ? 'auto' : 'none' }}
-              >
-                @
-              </span>
-            </span>
-            eugenio<span className="underline">sainte</span>marie
-          </a>
-          <div className="relative flex flex-col items-center">
-            <div
-              className="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 rounded-full bg-white border-4 border-gray-300 shadow-2xl relative overflow-hidden opacity-90 transition-all duration-300"
-              style={{
-                transform: `rotate(${rotation}deg)`
-              }}
-            >
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full bg-gray-800 shadow-inner border-2 border-gray-600"></div>
-            </div>
-          </div>
-        </div>
+        {/* ...tu contenido principal aquí... */}
       </div>
+      <footer className="w-full text-center py-4 absolute bottom-0 left-0 z-50">
+        <a
+          href="https://eugeniosaintemarie.github.io"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-400 hover:text-[#1DB954] transition-colors duration-200 font-mono text-sm select-none"
+        >
+          {"∃ugenio © "}{new Date().getFullYear()}
+        </a>
+      </footer>
     </>
   );
 }
