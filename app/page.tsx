@@ -180,14 +180,40 @@ export default function Home() {
       </div>
       <footer className="w-full text-center py-4 absolute bottom-0 left-0 z-50">
         <a
-          href="https://eugeniosaintemarie.github.io"
+          data-repo="."
+          href="#"
           target="_blank"
           rel="noopener noreferrer"
+          title="Inicio"
           className="text-gray-400 hover:text-violet-500 transition-colors duration-200 font-mono text-sm select-none"
         >
           {"∃ugenio © "}{new Date().getFullYear()}
         </a>
       </footer>
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            (() => {
+              const siteBaseURL = "https://eugeniosaintemarie.github.io".replace(/\/$/, "");
+              const buildRepoURL = (repoName, query = "") => {
+                const repoPath = repoName === "." ? "" : repoName + "/";
+                const url = new URL(repoPath, siteBaseURL + "/");
+                if (query) {
+                  url.search = query.startsWith("?") ? query : "?" + query;
+                }
+                return url.toString();
+              };
+              document.querySelectorAll("[data-repo]").forEach((link) => {
+                const repoName = link.dataset.repo;
+                if (!repoName) {
+                  return;
+                }
+                link.href = buildRepoURL(repoName, link.dataset.query || "");
+              });
+            })();
+          `,
+        }}
+      />
     </>
   );
 }
