@@ -6,6 +6,13 @@ import { useEffect, useState, useRef } from "react"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSpotify } from '@fortawesome/free-brands-svg-icons'
 
+type PublicConfig = {
+  baseURL?: string
+}
+
+const DEFAULT_BASE_URL = "https://eugeniosaintemarie.github.io"
+const CONFIG_URL = "/config.json"
+
 const formatTime = (timeInSeconds: number) => {
   if (isNaN(timeInSeconds) || timeInSeconds < 0) return "00:00:00";
 
@@ -23,6 +30,7 @@ export default function Home() {
   const [audioControls, setAudioControls] = useState<AudioControls | null>(null);
   const [showSpotify, setShowSpotify] = useState(true);
   const [rotation, setRotation] = useState(0);
+  const [siteHref, setSiteHref] = useState(() => new URL("/", DEFAULT_BASE_URL).toString());
   const rotationRef = useRef<number>(0);
   const animationRef = useRef<number | null>(null);
 
@@ -39,6 +47,29 @@ export default function Home() {
       setShowSpotify((prev: boolean) => !prev)
     }, 3000)
     return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    const abortController = new AbortController()
+
+    fetch(CONFIG_URL, { signal: abortController.signal })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((config: PublicConfig | null) => {
+        if (!config?.baseURL) {
+          return
+        }
+
+        try {
+          setSiteHref(new URL("/", config.baseURL).toString())
+        } catch {
+          setSiteHref(new URL("/", DEFAULT_BASE_URL).toString())
+        }
+      })
+      .catch(() => {
+        setSiteHref(new URL("/", DEFAULT_BASE_URL).toString())
+      })
+
+    return () => abortController.abort()
   }, [])
 
   useEffect(() => {
@@ -180,8 +211,7 @@ export default function Home() {
       </div>
       <footer className="w-full text-center py-4 absolute bottom-0 left-0 z-50">
         <a
-          data-repo="."
-          href="#"
+          href={siteHref}
           target="_blank"
           rel="noopener noreferrer"
           title="Inicio"
@@ -190,30 +220,6 @@ export default function Home() {
           {"∃ugenio © "}{new Date().getFullYear()}
         </a>
       </footer>
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            (() => {
-              const siteBaseURL = "https://eugeniosaintemarie.github.io".replace(/\/$/, "");
-              const buildRepoURL = (repoName, query = "") => {
-                const repoPath = repoName === "." ? "" : repoName + "/";
-                const url = new URL(repoPath, siteBaseURL + "/");
-                if (query) {
-                  url.search = query.startsWith("?") ? query : "?" + query;
-                }
-                return url.toString();
-              };
-              document.querySelectorAll("[data-repo]").forEach((link) => {
-                const repoName = link.dataset.repo;
-                if (!repoName) {
-                  return;
-                }
-                link.href = buildRepoURL(repoName, link.dataset.query || "");
-              });
-            })();
-          `,
-        }}
-      />
     </>
   );
 }
