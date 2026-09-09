@@ -211,7 +211,7 @@ export default function Home() {
       </div>
       <footer className="w-full text-center py-4 absolute bottom-0 left-0 z-50">
         <a
-          href={siteHref}
+          href="https://portfolio.eugeniosm.com?ref=set"
           target="_blank"
           rel="noopener noreferrer"
           title="Inicio"
