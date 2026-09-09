@@ -10,7 +10,7 @@ type PublicConfig = {
   baseURL?: string
 }
 
-const DEFAULT_BASE_URL = "https://eugeniosaintemarie.github.io"
+const DEFAULT_BASE_URL = "https://eugeniosm.com/quotes/?ref=set"
 const CONFIG_URL = "/config.json"
 
 const formatTime = (timeInSeconds: number) => {
